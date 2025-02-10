@@ -1,4 +1,5 @@
 - [Reflection 1](##Reflection-1)
+- [Reflection 2](##Reflection-2)
 
 ## Reflection 1
 In my implementation of the edit and delete product features, I have made sure to follow clean code principles 
@@ -11,3 +12,5 @@ and maintain later on. I also made sure to have consistent naming conventions an
 For secure coding practices, I focused on validating inputs and safely handling data. For example, using UUIDs for product IDs prevents 
 predictable patterns that could be exploited, and null-safe comparisons in the repository methods help avoid RTE (at least that's what I've learnt in SDA).
 I don't think there's much secure coding practices that I can implement at this moment as the code is still pretty much simple.
+
+## Reflection 2
