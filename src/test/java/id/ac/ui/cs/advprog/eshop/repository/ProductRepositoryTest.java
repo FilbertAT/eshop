@@ -7,7 +7,6 @@ import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.boot.test.mock.mockito.MockBean;
 
 import java.util.Iterator;
 
@@ -189,6 +188,23 @@ public class ProductRepositoryTest {
             assertTrue(productIterator.hasNext());
             Product savedProduct = productIterator.next();
             assertEquals(product1.getProductId(), savedProduct.getProductId());
+            assertFalse(productIterator.hasNext());
+        }
+        @Test
+        void testDeleteReturnsFalseWhenProductNotFound() {
+            Product product = new Product();
+            product.setProductId("eb558e9f-1c39-460e-8860-71af6af63bd6");
+            product.setProductName("Sampo Cap Bambang");
+            product.setProductQuantity(10);
+            productRepository.create(product);
+
+            boolean result = productRepository.delete("a0f9de46-90b1-437d-a0bf-d0821dde9096");
+            assertFalse(result);
+
+            Iterator<Product> productIterator = productRepository.findAll();
+            assertTrue(productIterator.hasNext());
+            Product remainingProduct = productIterator.next();
+            assertEquals("eb558e9f-1c39-460e-8860-71af6af63bd6", remainingProduct.getProductId());
             assertFalse(productIterator.hasNext());
         }
     }
