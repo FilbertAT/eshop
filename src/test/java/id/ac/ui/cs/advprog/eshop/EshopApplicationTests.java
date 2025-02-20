@@ -9,6 +9,7 @@ class EshopApplicationTests {
 
     @Test
     void contextLoads() {
+        // No implementation needed – verifies context startup
     }
 
     @Test
