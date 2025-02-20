@@ -19,6 +19,8 @@ public class ProductRepositoryTest {
 
     @BeforeEach
     void setUp() {
+        // This method is intentionally left empty.
+        // If necessary, initialize common test dependencies here.
     }
 
     @Test
