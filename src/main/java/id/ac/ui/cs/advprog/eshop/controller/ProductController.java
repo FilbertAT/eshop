@@ -17,7 +17,10 @@ public class ProductController {
     private static final String REDIRECT_PRODUCT_LIST = "redirect:/product/list";
 
     @Autowired
-    private ProductService service;
+    private final ProductService service;
+    public ProductController(ProductService service) {
+        this.service = service;
+    }
 
     @GetMapping("/create")
     public String createProductPage(Model model) {
