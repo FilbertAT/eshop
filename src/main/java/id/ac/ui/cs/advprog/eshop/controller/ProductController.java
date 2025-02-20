@@ -1,4 +1,3 @@
-
 package id.ac.ui.cs.advprog.eshop.controller;
 
 import id.ac.ui.cs.advprog.eshop.model.Product;
@@ -15,6 +14,8 @@ import java.util.UUID;
 @RequestMapping("/product")
 public class ProductController {
 
+    private static final String REDIRECT_PRODUCT_LIST = "redirect:/product/list";
+
     @Autowired
     private ProductService service;
 
@@ -29,7 +30,7 @@ public class ProductController {
     public String createProductPost(@ModelAttribute Product product, Model model) {
         product.setProductId(UUID.randomUUID().toString());
         service.create(product);
-        return "redirect:/product/list";
+        return REDIRECT_PRODUCT_LIST;
     }
 
     @GetMapping ("/list")
@@ -46,19 +47,19 @@ public class ProductController {
             model.addAttribute("product", product);
             return "EditProduct";
         }
-        return "redirect:/product/list";
+        return REDIRECT_PRODUCT_LIST;
     }
 
     @PostMapping("/edit")
     public String editProductPost(@ModelAttribute Product product) {
         service.update(product);
-        return "redirect:/product/list";
+        return REDIRECT_PRODUCT_LIST;
     }
 
     @GetMapping("/delete/{id}")
     public String deleteProduct(@PathVariable("id") String id) {
         service.delete(id);
-        return "redirect:/product/list";
+        return REDIRECT_PRODUCT_LIST;
     }
     
 }
