@@ -10,4 +10,10 @@ class EshopApplicationTests {
     void contextLoads() {
     }
 
+    @Test
+    void mainMethodRuns() {
+        // When calling the main method, if no exceptions are thrown, we consider the test passed.
+        EshopApplication.main(new String[] {});
+    }
+
 }

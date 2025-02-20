@@ -7,7 +7,6 @@ import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.boot.test.mock.mockito.MockBean;
 
 import java.util.Iterator;
 
@@ -191,5 +190,41 @@ public class ProductRepositoryTest {
             assertEquals(product1.getProductId(), savedProduct.getProductId());
             assertFalse(productIterator.hasNext());
         }
+        @Test
+        void testDeleteReturnsFalseWhenProductNotFound() {
+            Product product = new Product();
+            product.setProductId("eb558e9f-1c39-460e-8860-71af6af63bd6");
+            product.setProductName("Sampo Cap Bambang");
+            product.setProductQuantity(10);
+            productRepository.create(product);
+
+            boolean result = productRepository.delete("a0f9de46-90b1-437d-a0bf-d0821dde9096");
+            assertFalse(result);
+
+            Iterator<Product> productIterator = productRepository.findAll();
+            assertTrue(productIterator.hasNext());
+            Product remainingProduct = productIterator.next();
+            assertEquals("eb558e9f-1c39-460e-8860-71af6af63bd6", remainingProduct.getProductId());
+            assertFalse(productIterator.hasNext());
+        }
+    }
+    @Test
+    void testDeleteProductWithNullProductId() {
+        // Create a product without setting its productId (it remains null)
+        Product product = new Product();
+        product.setProductName("Product With Null ID");
+        product.setProductQuantity(10);
+        productRepository.create(product);
+
+        // Attempt to delete a product with a non-null ID.
+        // Since the created product's productId is null, it should not be deleted.
+        boolean deleted = productRepository.delete("nonexistent-id");
+        assertFalse(deleted);
+
+        // Verify that the product is still in the repository.
+        Iterator<Product> iterator = productRepository.findAll();
+        assertTrue(iterator.hasNext());
+        Product savedProduct = iterator.next();
+        assertNull(savedProduct.getProductId());
     }
 }
