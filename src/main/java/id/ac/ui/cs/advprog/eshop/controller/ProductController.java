@@ -16,8 +16,8 @@ public class ProductController {
 
     private static final String REDIRECT_PRODUCT_LIST = "redirect:/product/list";
 
-    @Autowired
     private final ProductService service;
+    @Autowired
     public ProductController(ProductService service) {
         this.service = service;
     }
