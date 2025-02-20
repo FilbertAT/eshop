@@ -5,7 +5,7 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.Nested;
 
 import static org.junit.jupiter.api.Assertions.*;
-public class ProductTest {
+class ProductTest {
     Product product;
 
     @BeforeEach
