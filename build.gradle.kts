@@ -6,6 +6,14 @@ plugins {
     id("org.sonarqube") version "6.0.1.5171"
 }
 
+sonar {
+    properties {
+        property("sonar.projectKey", "FilbertAT_eshop")
+        property("sonar.organization", "filbert")
+        property("sonar.host.url", "https://sonarcloud.io")
+    }
+}
+
 group = "id.ac.ui.cs.advprog"
 version = "0.0.1-SNAPSHOT"
 
@@ -75,12 +83,8 @@ tasks.test {
 }
 tasks.jacocoTestReport {
     dependsOn(tasks.test)
-}
-
-sonar {
-    properties {
-        property("sonar.projectKey", "FilbertAT_eshop")
-        property("sonar.organization", "filbert")
-        property("sonar.host.url", "https://sonarcloud.io")
+    reports {
+        xml.required = true
+        html.required = true
     }
 }
