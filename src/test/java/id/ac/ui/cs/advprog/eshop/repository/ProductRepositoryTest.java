@@ -208,4 +208,23 @@ public class ProductRepositoryTest {
             assertFalse(productIterator.hasNext());
         }
     }
+    @Test
+    void testDeleteProductWithNullProductId() {
+        // Create a product without setting its productId (it remains null)
+        Product product = new Product();
+        product.setProductName("Product With Null ID");
+        product.setProductQuantity(10);
+        productRepository.create(product);
+
+        // Attempt to delete a product with a non-null ID.
+        // Since the created product's productId is null, it should not be deleted.
+        boolean deleted = productRepository.delete("nonexistent-id");
+        assertFalse(deleted);
+
+        // Verify that the product is still in the repository.
+        Iterator<Product> iterator = productRepository.findAll();
+        assertTrue(iterator.hasNext());
+        Product savedProduct = iterator.next();
+        assertNull(savedProduct.getProductId());
+    }
 }
