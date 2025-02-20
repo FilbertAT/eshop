@@ -1,5 +1,19 @@
+# E-shop
+
+---
+<strong>
+
+Filbert Aurelian Tjiaranata ~ 2306152336 ~ AdPro B
+
+## Website URL
+[E-shop](https://striped-myrilla-filbert-9053e3e5.koyeb.app/)
+
+## Reflections
 - [Reflection 1](##Reflection-1)
 - [Reflection 2](##Reflection-2)
+- [Reflection 3](##Reflection-3)
+
+</strong>
 
 ## Reflection 1
 In my implementation of the edit and delete product features, I have made sure to follow clean code principles 
@@ -37,3 +51,5 @@ I think copying the same setup procedures and instance variables into a new test
 principle, which means that if we need to make a change to the common setup or helper methods, we'll have to update it in multiple places, increasing the chance of mistakes. Hard-coded values like URLs, button names, and page 
 titles are also a problem because if they ever change, we have to hunt them down in every single file 😵. A possible improvement which I suggest is to extract the common code into a base or helper class that all our test suites can use. This way, our code 
 is easier to maintain and update, and it stays cleaner overall.
+
+## Reflection 3
