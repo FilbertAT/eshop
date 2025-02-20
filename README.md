@@ -15,6 +15,7 @@ Filbert Aurelian Tjiaranata ~ 2306152336 ~ AdPro B
 
 </strong>
 
+# Tutorial 1
 ## Reflection 1
 In my implementation of the edit and delete product features, I have made sure to follow clean code principles 
 and secure coding practices that is being taught in class by Dr. Ade Azurat or the coding standards module given in SCELE.
@@ -52,4 +53,177 @@ principle, which means that if we need to make a change to the common setup or h
 titles are also a problem because if they ever change, we have to hunt them down in every single file 😵. A possible improvement which I suggest is to extract the common code into a base or helper class that all our test suites can use. This way, our code 
 is easier to maintain and update, and it stays cleaner overall.
 
+# Tutorial 2
 ## Reflection 3
+
+### Code Quality Issues from SonarCloud that I fixed:
+
+#### 1. Group dependencies by their destination
+
+Previous Code
+```Java
+// build.gradle.kts
+
+dependencies {
+    implementation("org.springframework.boot:spring-boot-starter-thymeleaf")
+    implementation("org.springframework.boot:spring-boot-starter-web")
+    compileOnly("org.projectlombok:lombok")
+    developmentOnly("org.springframework.boot:spring-boot-devtools")
+    annotationProcessor("org.springframework.boot:spring-boot-configuration-processor")
+    annotationProcessor("org.projectlombok:lombok")
+    testImplementation("org.springframework.boot:spring-boot-starter-test")
+    testRuntimeOnly("org.junit.platform:junit-platform-launcher")
+    testImplementation("org.seleniumhq.selenium:selenium-java:$seleniumJavaVersion")
+    testImplementation("io.github.bonigarcia:selenium-jupiter:$seleniumJupiterVersion")
+    testImplementation("io.github.bonigarcia:webdrivermanager:$webdrivermanagerVersion")
+    testImplementation("org.junit.jupiter:junit-jupiter:$junitJupiterVersion")
+}
+```
+
+Fixed Code
+```Java
+// build.gradle.kts
+
+dependencies {
+    implementation("org.springframework.boot:spring-boot-starter-thymeleaf")
+    implementation("org.springframework.boot:spring-boot-starter-web")
+    compileOnly("org.projectlombok:lombok")
+    developmentOnly("org.springframework.boot:spring-boot-devtools")
+    annotationProcessor("org.springframework.boot:spring-boot-configuration-processor")
+    annotationProcessor("org.projectlombok:lombok")
+    testImplementation("org.springframework.boot:spring-boot-starter-test")
+    testImplementation("org.junit.jupiter:junit-jupiter:$junitJupiterVersion")
+    testImplementation("org.seleniumhq.selenium:selenium-java:$seleniumJavaVersion")
+    testImplementation("io.github.bonigarcia:selenium-jupiter:$seleniumJupiterVersion")
+    testImplementation("io.github.bonigarcia:webdrivermanager:$webdrivermanagerVersion")
+    testRuntimeOnly("org.junit.platform:junit-platform-launcher")
+}
+```
+
+**As you can see, I grouped together testImplementation and testRuntimeOnly**
+
+#### 2. Merge Pull Request Failed in SonarQube and was showing 0.0% Coverage on Code (even though already at 100% in local)
+
+Previous Code
+```java
+// EshopApplicationTests
+
+class EshopApplicationTests {
+    @Test
+    void mainMethodRuns() {
+        EshopApplication.main(new String[] {});
+    }
+}
+```
+
+```java
+// EshopApplicationTests
+
+    class EshopApplicationTests {
+        @Test
+        void mainMethodRuns() {
+            assertDoesNotThrow(() -> EshopApplication.main(new String[] {}));
+        }
+    }
+```
+
+**As you can see, I added assertDoesNotThrow to the corresponding test case**
+
+#### 3. Use constructor injection instead of field injection (2x)
+
+Previous Code
+```Java
+// ProductServiceImpl.java
+
+@Autowired
+private ProductRepository productRepository;
+
+// ProductController.java
+
+@Autowired
+private ProductService service;
+```
+
+Fixed Code
+```Java
+// ProductServiceImpl.java
+
+private final ProductRepository productRepository;
+@Autowired
+public ProductServiceImpl(ProductRepository productRepository) {
+    this.productRepository = productRepository;
+}
+
+// ProductController.java
+
+private final ProductService service;
+@Autowired
+public ProductController(ProductService service) {
+    this.service = service;
+}
+```
+**As you can see, I changed the Autowired injection from field injection to an injection on the class constructor**
+
+#### 4. Add a nested comment explaining why this method is empty
+
+Previous Code
+```Java
+// EshopApplicationTests.java
+
+@Test
+void contextLoads() {
+}
+
+// ProductRepositoryTest.java
+
+@BeforeEach
+void setUp() {
+}
+```
+
+Fixed Code
+```Java
+// EshopApplicationTests.java
+
+@Test
+void contextLoads() {
+    // No implementation needed – verifies context startup
+}
+
+// ProductRepositoryTest.java
+
+@BeforeEach
+void setUp() {
+    // This method is intentionally left empty.
+    // If necessary, initialize common test dependencies here.
+}
+```
+**As you can see, I put comments inside the method explaining why that method is empty**
+
+#### 5. Remove the declaration of thrown exception 'java.lang.Exception'
+**I removed "throws Exception" in several functions of the unit tests. Since they're quite a few, I choose not to show the before-and-after code**
+
+#### 6. Define a constant instead of duplicating for 'redirect:/product/list'
+**I replaced every `return "redirect:/product/list";` with `return REDIRECT_PRODUCT_LIST;`, a constant that I have previously made which holds on a value of the exact same thing**
+
+#### 7. Remove the 'public' modifier on several Unit Tests
+
+### CI/CD workflows Reflection
+
+I think my current CI/CD implementation already meets the definition of Continuous Integration and Continuous
+Deployment because it already **fully automates processes that ensure both code quality and reliable delivery**.
+
+In terms of Continuous Integration, **the ci.yml file runs unit tests on every push or pull request**,
+ensuring that each change is immediately verified against the codebase. **The scorecard.yml workflow 
+checks the repository's supply chain security**, while **the sonarcloud.yml pipeline conducts static 
+code analysis to detect bugs, vulnerabilities, and maintainability issues**.
+
+On the Continuous Deployment side, **the pipeline is set up to automatically deploy updates to Koyeb
+whenever the main branch is updated**, which streamlines the release process and minimizes the risk of
+introducing errors. Moreover, **if any test fails during the integration phase, the deployment is
+immediately halted**, preventing broken or insecure code from reaching production.
+
+I think by applying them, where every commit triggers the same automated steps, it already
+effectively eliminates human errors (my errors since I'm the dev) and inconsistencies, 
+thereby achieving a stable and reliable delivery process.
+
