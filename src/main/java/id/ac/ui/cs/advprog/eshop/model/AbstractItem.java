@@ -4,42 +4,43 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.NoArgsConstructor;
 
+/**
+ * Abstract base class for all items in the shop
+ * Implements the Item interface and provides common functionality
+ */
 @Getter @Setter @NoArgsConstructor
-public class Product extends AbstractItem {
-    private String productId;
-    private String productName;
-    private Integer productQuantity;
+public abstract class AbstractItem implements Item {
+    protected String id;
+    protected String name;
+    protected int quantity;
 
     @Override
     public String getId() {
-        return this.productId;
+        return this.id;
     }
 
     @Override
     public void setId(String id) {
-        this.productId = id;
-        super.setId(id);
+        this.id = id;
     }
 
     @Override
     public String getName() {
-        return this.productName;
+        return this.name;
     }
 
     @Override
     public void setName(String name) {
-        this.productName = name;
-        super.setName(name);
+        this.name = name;
     }
 
     @Override
     public int getQuantity() {
-        return this.productQuantity != null ? this.productQuantity : 0;
+        return this.quantity;
     }
 
     @Override
     public void setQuantity(int quantity) {
-        this.productQuantity = quantity;
-        super.setQuantity(quantity);
+        this.quantity = quantity;
     }
 }

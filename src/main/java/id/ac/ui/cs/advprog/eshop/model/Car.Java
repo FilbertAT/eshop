@@ -4,7 +4,7 @@ import lombok.Setter;
 import lombok.NoArgsConstructor;
 
 @Getter @Setter @NoArgsConstructor
-public class Car implements Item {
+public class Car extends AbstractItem {
     private String carId;
     private String carName;
     private String carColor;
@@ -18,6 +18,7 @@ public class Car implements Item {
     @Override
     public void setId(String id) {
         this.carId = id;
+        super.setId(id);
     }
 
     @Override
@@ -28,6 +29,7 @@ public class Car implements Item {
     @Override
     public void setName(String name) {
         this.carName = name;
+        super.setName(name);
     }
 
     @Override
@@ -38,6 +40,7 @@ public class Car implements Item {
     @Override
     public void setQuantity(int quantity) {
         this.carQuantity = quantity;
+        super.setQuantity(quantity);
     }
     
     // Car-specific method
