@@ -7,11 +7,20 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import id.ac.ui.cs.advprog.eshop.service.IdGeneratorService;
+
 @Repository
 public class ProductRepository {
     private List<Product> productData = new ArrayList<>();
 
+    @Autowired
+    private IdGeneratorService idGeneratorService;
+
     public Product create(Product product) {
+        if (product.getProductId() == null) {
+            product.setProductId(idGeneratorService.generateId());
+        }
         productData.add(product);
         return product;
     }
