@@ -3,11 +3,11 @@ package id.ac.ui.cs.advprog.eshop.repository;
 import id.ac.ui.cs.advprog.eshop.model.Identifiable;
 import id.ac.ui.cs.advprog.eshop.service.IdGeneratorService;
 
-import org.springframework.beans.factory.annotation.Autowired;
-
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+
+import org.springframework.beans.factory.annotation.Autowired;
 
 /**
  * Abstract repository implementation for all items
@@ -15,9 +15,12 @@ import java.util.List;
  */
 public abstract class AbstractItemRepository<T extends Identifiable> implements ItemRepository<T> {
     protected final List<T> itemData = new ArrayList<>();
+    protected final IdGeneratorService idGeneratorService;
     
     @Autowired
-    protected IdGeneratorService idGeneratorService;
+    public AbstractItemRepository(IdGeneratorService idGeneratorService) {
+        this.idGeneratorService = idGeneratorService;
+    }
 
     @Override
     public T create(T item) {
