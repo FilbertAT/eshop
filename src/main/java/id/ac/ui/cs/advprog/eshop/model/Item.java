@@ -1,7 +1,5 @@
 package id.ac.ui.cs.advprog.eshop.model;
 
-import com.fasterxml.jackson.databind.util.Named;
-
 /**
 * Base interface for all items in the shop
 * Combines multiple specific interfaces
