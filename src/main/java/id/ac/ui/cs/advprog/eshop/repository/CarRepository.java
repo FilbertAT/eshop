@@ -4,7 +4,6 @@ import org.springframework.stereotype.Repository;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
-import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import id.ac.ui.cs.advprog.eshop.service.IdGeneratorService;
