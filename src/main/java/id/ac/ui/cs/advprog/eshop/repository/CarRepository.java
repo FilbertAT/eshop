@@ -2,9 +2,6 @@ package id.ac.ui.cs.advprog.eshop.repository;
 import id.ac.ui.cs.advprog.eshop.model.Car;
 import id.ac.ui.cs.advprog.eshop.service.IdGeneratorService;
 
-import org.springframework.stereotype.Repository;
-
-@Repository
 public class CarRepository extends AbstractItemRepository<Car> {
 
   public CarRepository(IdGeneratorService idGeneratorService) {
