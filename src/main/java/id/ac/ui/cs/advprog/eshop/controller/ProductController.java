@@ -12,6 +12,8 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/product")
 public class ProductController extends AbstractItemController<Product> {
     
+    private final ProductService service;
+
     @Autowired
     public ProductController(ProductService service) {
         super(
@@ -23,6 +25,7 @@ public class ProductController extends AbstractItemController<Product> {
             "product",
             "products"
         );
+        this.service = service;
     }
 
     @GetMapping("/create")
@@ -32,7 +35,8 @@ public class ProductController extends AbstractItemController<Product> {
 
     @PostMapping("/create")
     public String createProductPost(@ModelAttribute Product product, Model model) {
-        return createPost(product);
+        service.create(product);
+        return "redirect:list";
     }
 
     @GetMapping ("/list")
@@ -42,12 +46,21 @@ public class ProductController extends AbstractItemController<Product> {
 
     @GetMapping("/edit/{id}")
     public String editProductPage(@PathVariable String id, Model model) {
-        return editPage(id, model);
+        Product product = service.findById(id);
+        
+        if (product == null) {
+            // Use "../list" for the redirect instead of just "list"
+            return "redirect:../list";
+        }
+        
+        model.addAttribute("product", product);
+        return "editProduct";
     }
 
     @PostMapping("/edit")
     public String editProductPost(@ModelAttribute Product product, Model model) {
-        return editPost(product);
+        service.update(product);
+        return "redirect:list";
     }
 
     @PostMapping("/delete")
