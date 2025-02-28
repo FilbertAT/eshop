@@ -81,11 +81,8 @@ class ProductServiceImplTest {
     void testDelete() {
         String productId = "123";
 
-        when(productRepository.delete(productId)).thenReturn(true);
+        productService.delete(productId);
 
-        boolean isDeleted = productService.delete(productId);
-
-        assertTrue(isDeleted);
         verify(productRepository, times(1)).delete(productId);
     }
 }

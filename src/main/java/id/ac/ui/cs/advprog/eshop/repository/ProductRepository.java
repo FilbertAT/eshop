@@ -1,55 +1,28 @@
 package id.ac.ui.cs.advprog.eshop.repository;
-
 import id.ac.ui.cs.advprog.eshop.model.Product;
+import id.ac.ui.cs.advprog.eshop.service.IdGeneratorService;
 import org.springframework.stereotype.Repository;
 
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
-
 @Repository
-public class ProductRepository {
-    private List<Product> productData = new ArrayList<>();
+public class ProductRepository extends AbstractItemRepository<Product> {
 
-    public Product create(Product product) {
-        productData.add(product);
-        return product;
+    public ProductRepository(IdGeneratorService idGeneratorService) {
+        super(idGeneratorService);
     }
 
-    public Iterator<Product> findAll() {
-        return productData.iterator();
-    }
+    @Override
+    public Product update(Product product) {
+        for (Product existingProduct : itemData) {
+            if (existingProduct.getId().equals(product.getId())) {
+                existingProduct.setName(product.getName());
+                existingProduct.setQuantity(product.getQuantity());
 
-    public Product findById(String productId) {
-        for (Product product : productData) {
-            if (product.getProductId().equals(productId)) {
-                return product;
+                // For backward compatibility
+                existingProduct.setProductName(product.getProductName());
+                existingProduct.setProductQuantity(product.getProductQuantity());
+                return existingProduct;
             }
         }
         return null; // if the product is not found
-    }
-
-    public Product update(Product updatedProduct) {
-        for (Product product : productData) {
-            if (product.getProductId().equals(updatedProduct.getProductId())) {
-                product.setProductName(updatedProduct.getProductName());
-                product.setProductQuantity(updatedProduct.getProductQuantity());
-                return product;
-            }
-        }
-        return null; // if the product is not found
-    }
-
-    public boolean delete(String productId) {
-        Iterator<Product> iterator = productData.iterator();
-        while (iterator.hasNext()) {
-            Product product = iterator.next();
-            if (product.getProductId() != null && product.getProductId().equals(productId)) {
-                iterator.remove();
-                return true;  // if the product is Successfully deleted
-            }
-        }
-        return false;  // if the product is not found
-    }
-    
+    }  
 }

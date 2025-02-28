@@ -227,3 +227,180 @@ I think by applying them, where every commit triggers the same automated steps, 
 effectively eliminates human errors (my errors since I'm the dev) and inconsistencies, 
 thereby achieving a stable and reliable delivery process.
 
+# Tutorial 3
+## Reflection 4
+
+### I. Have I Implemented SOLID?
+
+#### 1) SRP
+Yes, I have implemented SRP.
+
+The Single Responsibility Principle emphasizes that a class should have only one reason to change, meaning it should be responsible for just one aspect. In my project:
+
+- Models (e.g., Product, Car) are dedicated to representing data.
+- Repositories (e.g., ProductRepository, CarRepository) handle data persistence operations.
+- Services (e.g., ProductService, CarService) focus exclusively on business logic.
+- Controllers (e.g., ProductController, CarController) manage HTTP request handling.
+- Utility Services (e.g., IdGeneratorService) serve a single, specific function.
+
+For example, our ProductController only handles routing and request handling:
+```Java
+@Controller
+@RequestMapping("/product")
+public class ProductController extends AbstractItemController<Product> {
+
+}
+```
+
+#### 2) OCP
+Yes, I have implemented OCP.
+
+The Open/Closed Principle asserts that software entities should allow extensions without requiring modifications to existing code. Our project applies this principle through:
+
+- Abstract Base Classes, which enable extensions without altering existing implementations.
+- Interfaces, which establish contracts that can be implemented in various ways.
+- Inheritance Hierarchies, which facilitate adding new functionality through extension.
+
+For example, in my `AbstractItemRepository` provides a base implementation that can be extended:
+```java
+public abstract class AbstractItemRepository<T extends Identifiable> implements ItemRepository<T> {
+    @Override
+    public abstract T update(T item);
+}
+```
+
+#### 3) LSP
+Yes, I have implemented LSP.
+
+The Liskov Substitution Principle ensures that objects of a superclass can be substituted with objects of a subclass without compromising program correctness. In our project:
+
+- Subclasses such as Product and Car inherit from AbstractItem while preserving its expected behavior.
+- AbstractItemService and AbstractItemRepository establish contracts that are properly adhered to by their subclasses.
+- The service layer operates seamlessly with any Item implementation without requiring awareness of its specific type.
+
+For example, my inheritance hierarchy ensures that:
+```java
+public abstract class AbstractItemService<T extends Identifiable, R extends ItemRepository<T>> implements ItemService<T> {
+    @Override
+    public List<T> findAll() {
+        Iterator<T> itemIterator = repository.findAll();
+        List<T> allItems = new ArrayList<>();
+        itemIterator.forEachRemaining(allItems::add);
+        return allItems;
+    }
+}
+```
+
+#### 4) ISP
+Yes, I have implemented ISP.
+
+The Interface Segregation Principle emphasizes that clients should not be required to depend on interfaces they do not use. Our project applies this principle by:
+
+- Small, specialized interfaces (e.g., Identifiable, Named, Quantifiable, Colorable) that focus on specific responsibilities.
+- Composed interfaces that integrate smaller interfaces to meet particular requirements.
+- Interface hierarchies that enable clients to depend only on the functionalities they need.
+
+For example, instead of having one large Item interface with all possible methods, I've segregated them:
+
+```java
+public interface Identifiable {
+    String getId();
+    void setId(String id);
+}
+
+public interface Named {
+    String getName();
+    void setName(String name);
+}
+
+public interface Quantifiable {
+    int getQuantity();
+    void setQuantity(int quantity);
+}
+
+public interface Colorable {
+    String getColor();
+    void setColor(String color);
+}
+```
+
+#### 5) DIP
+Yes, I have implemented DIP.
+
+The Dependency Inversion Principle asserts that high-level modules should not rely on low-level modules; instead, both should depend on abstractions. Our project adheres to this principle by:
+
+- Utilizing dependency injection across the codebase.
+- Employing configuration classes to manage component wiring.
+- Defining interfaces to separate implementation details from their usage.
+
+For example, services depend on repository interfaces, not concrete implementations:
+```java
+public abstract class AbstractItemService<T extends Identifiable, R extends ItemRepository<T>> implements ItemService<T> {
+    @Autowired
+    protected R repository; // Depends on the repository interface, not implementation
+}
+```
+And our configuration classes handle the wiring:
+```java
+@Configuration
+public class RepositoryConfig {
+    @Bean
+    public ItemRepository<Product> productRepositoryBean(IdGeneratorService idGeneratorService) {
+        return new ProductRepository(idGeneratorService);
+    }
+}
+```
+
+### II. Advantages of Applying SOLID Principles
+#### 1. Improved Maintainability
+Applying the Single Responsibility Principle (SRP) makes the codebase more structured, understandable, and easier to maintain. Since each class has a well-defined purpose, debugging and making modifications become more efficient. **For example**, if there is a need to alter the way products are stored in the system, changes will be isolated to `ProductRepository` without affecting other parts of the application. This reduces complexity and minimizes unintended side effects.
+
+The Open/Closed Principle (OCP) further enhances maintainability by allowing new functionalities to be added without modifying existing code. This reduces the likelihood of introducing bugs when making updates. **For example**, when incorporating a new item type, such as `Car` in this case, we don't have to modify the existing code. Instead of modifying the existing implementation, we simply extend it, ensuring the system remains stable and easier to manage.
+
+#### 2. Greater Flexibility and Extensibility
+The Liskov Substitution Principle (LSP) supports polymorphism by ensuring that subclasses can replace their parent classes without altering expected behavior. This enables seamless extensibility, as different Item implementations can be used interchangeably within the service layer without requiring modifications. **For example**, subclasses like `Product` and `Car` extend `AbstractItem` without breaking its behavior. `AbstractItemService` and `AbstractItemRepository` define contracts that are correctly implemented by their subclasses.
+
+The Interface Segregation Principle (ISP) promotes modular and targeted interface design, preventing unnecessary dependencies on methods that are not relevant to certain classes. This allows for more precise interface implementations. **For example**, if only `Car` items require color-related attributes, the `Colorable` interface can be implemented exclusively for them without imposing unnecessary methods on unrelated classes. This ensures that each class only contains the behavior it actually needs, making the system more adaptable to future changes.
+
+#### 3. Enhanced Testability
+The Dependency Inversion Principle (DIP) plays a crucial role in improving testability by encouraging the use of dependency injection. Instead of directly depending on concrete implementations, high-level modules rely on abstractions, making it easier to substitute real dependencies with mock objects during testing. This facilitates unit testing and reduces the complexity of setting up test cases.
+
+**For example**, in `ProductServiceImplTest`, we can mock the `ProductRepository` instead of relying on an actual database connection. This allows for isolated and efficient testing, ensuring that business logic is properly validated without being affected by external dependencies. As a result, the overall reliability of the codebase improves, and debugging becomes more manageable.
+
+### III. Disadvantages of Not Applying SOLID Principles
+
+#### 1. Code Duplication Issue
+Failing to adhere to the Single Responsibility Principle (SRP) and Open/Closed Principle (OCP) can lead to redundant code across different controllers and services. Without a shared abstraction like `AbstractItemController`, each individual controller would have to reimplement common CRUD operations separately, resulting in unnecessary duplication and maintenance challenges.
+Example:
+```java
+// Duplicate code in every controller without proper abstraction
+@GetMapping("/list")
+public String productListPage(Model model) {
+    model.addAttribute("products", productService.findAll());
+    return "productList";
+}
+
+@GetMapping("/list")
+public String carListPage(Model model) {
+    model.addAttribute("cars", carService.findAll());
+    return "carList";
+}
+```
+
+#### 2. Bloated Interfaces
+Without ISP, clients would need to implement methods they don't use. **For example**, Without ISP - one large interface forcing unnecessary implementations. So, all items must implement these, even if not needed. Like color only relevant for cars and not for books, so do author only relevant to books not to car
+
+#### 3. Tight Coupling
+Without DIP, high-level modules would depend directly on low-level modules:
+```java
+// Tight coupling without DIP
+public class ProductServiceImpl {
+    // Direct dependency on concrete implementation instead of interface
+    private ProductRepository repository = new ProductRepository();
+
+    // Hard to test, hard to change implementations
+}
+```
+
+#### 4. Rigidity
+Without adhering to the Open/Closed Principle (OCP), introducing new features would require modifying existing code, as seen in ItemService, where adding a new item type like Book necessitates altering the method instead of simply extending the functionality.
