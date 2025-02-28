@@ -26,12 +26,4 @@ public class CarRepository extends AbstractItemRepository<Car> {
 	}
 	return null;
   }
-    
-  /**
-   * Legacy method for backward compatibility
-   */
-  public Car update(String id, Car updatedCar) {
-    updatedCar.setId(id);
-	return update(updatedCar);
-  }
 }
