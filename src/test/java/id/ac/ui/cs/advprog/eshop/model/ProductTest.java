@@ -20,7 +20,7 @@ class ProductTest {
     class PositiveTests {
         @Test
         void testGetProductId() {
-            assertEquals("eb558e9f-1c39-460e-8860-71af6af63bd6", product.getProductId());
+            assertEquals("eb558e9f-1c39-460e-8860-71af6af63bd6", product.getId());
         }
 
         @Test
@@ -38,7 +38,7 @@ class ProductTest {
     class NegativeTests {
         @Test
         void testGetProductIdNegative() {
-            assertNotEquals("eb558e9f-1c39-460e-8860-71af6af63bd7", product.getProductId());
+            assertNotEquals("eb558e9f-1c39-460e-8860-71af6af63bd7", product.getId());
         }
 
         @Test

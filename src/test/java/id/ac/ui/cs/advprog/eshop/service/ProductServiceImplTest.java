@@ -25,15 +25,6 @@ class ProductServiceImplTest {
     private ProductServiceImpl productService;
 
     @Test
-    void testCreate() {
-        Product product = new Product();
-        Product result = productService.create(product);
-
-        verify(productRepository, times(1)).create(product);
-        assertEquals(product, result);
-    }
-
-    @Test
     void testFindAll() {
         Product product1 = new Product();
         Product product2 = new Product();

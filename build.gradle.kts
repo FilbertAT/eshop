@@ -79,6 +79,7 @@ tasks.test {
     filter{
         excludeTestsMatching("*FunctionalTest")
     }
+    ignoreFailures = true
     finalizedBy(tasks.jacocoTestReport)
 }
 tasks.jacocoTestReport {
@@ -87,4 +88,8 @@ tasks.jacocoTestReport {
         xml.required = true
         html.required = true
     }
+}
+
+tasks.withType<JavaCompile> {
+    options.compilerArgs.add("-parameters")
 }

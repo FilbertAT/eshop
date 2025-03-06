@@ -41,7 +41,7 @@ public class CarController extends AbstractItemController<Car> {
     }
 
     @GetMapping("/edit/{id}")
-    public String editCarPage(@PathVariable String id, Model model) {
+    public String editCarPage(@PathVariable("id") String id, Model model) {
         return editPage(id, model);
     }
 

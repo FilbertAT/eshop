@@ -1,14 +1,12 @@
 package id.ac.ui.cs.advprog.eshop.controller;
 
 import id.ac.ui.cs.advprog.eshop.model.Product;
-import id.ac.ui.cs.advprog.eshop.service.CarService;
 import id.ac.ui.cs.advprog.eshop.service.ProductService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.context.TestConfiguration;
-import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Import;
 import org.springframework.context.annotation.Primary;
@@ -48,12 +46,6 @@ class ProductControllerTest {
     @Autowired
     private ProductService service;
 
-    @MockBean
-    private CarController carController;
-
-    @MockBean
-    private CarService carService;
-
     private Product product1;
     private Product product2;
 
@@ -84,7 +76,7 @@ class ProductControllerTest {
                         .param("productName", "French Fries")
                         .param("productQuantity", "100"))
                 .andExpect(status().is3xxRedirection())
-                .andExpect(redirectedUrl("/product/list"));
+                .andExpect(redirectedUrl("list"));
 
         verify(service, times(1)).create(any(Product.class));
     }
@@ -103,9 +95,9 @@ class ProductControllerTest {
 
     @Test
     void testEditProductPageFound() throws Exception {
-        when(service.findById(product1.getProductId())).thenReturn(product1);
+        when(service.findById(product1.getId())).thenReturn(product1);
 
-        mockMvc.perform(get("/product/edit/" + product1.getProductId()))
+        mockMvc.perform(get("/product/edit/" + product1.getId()))
                 .andExpect(status().isOk())
                 .andExpect(view().name("EditProduct"))
                 .andExpect(model().attribute("product", product1));
@@ -117,27 +109,28 @@ class ProductControllerTest {
 
         mockMvc.perform(get("/product/edit/nonexistent"))
                 .andExpect(status().is3xxRedirection())
-                .andExpect(redirectedUrl("/product/list"));
+                .andExpect(redirectedUrl("../list"));
     }
 
     @Test
     void testEditProductPost() throws Exception {
         mockMvc.perform(post("/product/edit")
-                        .param("productId", product1.getProductId())
+                        .param("productId", product1.getId())
                         .param("productName", "Mashed Potatoes")
                         .param("productQuantity", "150"))
                 .andExpect(status().is3xxRedirection())
-                .andExpect(redirectedUrl("/product/list"));
+                .andExpect(redirectedUrl("list"));
 
         verify(service, times(1)).update(any(Product.class));
     }
 
     @Test
     void testDeleteProduct() throws Exception {
-        mockMvc.perform(get("/product/delete/" + product1.getProductId()))
+        mockMvc.perform(post("/product/delete")
+                        .param("id", product1.getProductId()))
                 .andExpect(status().is3xxRedirection())
-                .andExpect(redirectedUrl("/product/list"));
+                .andExpect(redirectedUrl("list"));
 
-        verify(service, times(1)).delete(product1.getProductId());
+        verify(service, times(1)).delete(product1.getId());
     }
 }

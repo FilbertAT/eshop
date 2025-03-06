@@ -45,7 +45,7 @@ public class ProductController extends AbstractItemController<Product> {
     }
 
     @GetMapping("/edit/{id}")
-    public String editProductPage(@PathVariable String id, Model model) {
+    public String editProductPage(@PathVariable("id") String id, Model model) {
         Product product = service.findById(id);
         
         if (product == null) {
@@ -54,7 +54,7 @@ public class ProductController extends AbstractItemController<Product> {
         }
         
         model.addAttribute("product", product);
-        return "editProduct";
+        return "EditProduct";
     }
 
     @PostMapping("/edit")
