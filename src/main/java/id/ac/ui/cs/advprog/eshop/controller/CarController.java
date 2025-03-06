@@ -17,9 +17,9 @@ public class CarController extends AbstractItemController<Car> {
         super(
             carService,
             "redirect:list",
-            "createCar",
-            "carList",
-            "editCar",
+            "CreateCar",
+            "CarList",
+            "EditCar",
             "car",
             "cars"
         );

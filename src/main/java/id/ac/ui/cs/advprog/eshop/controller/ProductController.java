@@ -19,9 +19,9 @@ public class ProductController extends AbstractItemController<Product> {
         super(
             service,
             "redirect:list",
-            "createProduct",
-            "productList",
-            "editProduct",
+            "CreateProduct",
+            "ProductList",
+            "EditProduct",
             "product",
             "products"
         );
