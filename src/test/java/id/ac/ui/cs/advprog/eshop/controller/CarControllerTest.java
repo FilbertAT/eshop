@@ -33,7 +33,7 @@ class CarControllerTest {
     void createCarPage_shouldReturnCreatePage() throws Exception {
         mockMvc.perform(get("/car/create"))
                 .andExpect(status().isOk())
-                .andExpect(view().name("createCar"))
+                .andExpect(view().name("CreateCar"))
                 .andExpect(model().attributeExists("car"));
     }
 
@@ -70,7 +70,7 @@ class CarControllerTest {
         
         mockMvc.perform(get("/car/list"))
                 .andExpect(status().isOk())
-                .andExpect(view().name("carList"))
+                .andExpect(view().name("CarList"))
                 .andExpect(model().attribute("cars", carList));
     }
 
@@ -84,7 +84,7 @@ class CarControllerTest {
 
         mockMvc.perform(get("/car/edit/{id}", "test-id"))
                 .andExpect(status().isOk())
-                .andExpect(view().name("editCar"))
+                .andExpect(view().name("EditCar"))
                 .andExpect(model().attribute("car", car));
     }
 
