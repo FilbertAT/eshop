@@ -12,6 +12,8 @@ Filbert Aurelian Tjiaranata ~ 2306152336 ~ AdPro B
 - [Reflection 1](##Reflection-1)
 - [Reflection 2](##Reflection-2)
 - [Reflection 3](##Reflection-3)
+- [Reflection 4](##Reflection-4)
+- [Reflection 5](##Reflection-5)
 
 </strong>
 
@@ -404,3 +406,47 @@ public class ProductServiceImpl {
 
 #### 4. Rigidity
 Without adhering to the Open/Closed Principle (OCP), introducing new features would require modifying existing code, as seen in ItemService, where adding a new item type like Book necessitates altering the method instead of simply extending the functionality.
+
+
+# Tutorial 4
+## Reflection 5
+
+1. **Reflect based on Percival (2017) proposed self-reflective questions (in “Principles and Best Practice of Testing” submodule, chapter “Evaluating Your Testing Objectives”), whether this TDD flow is useful enough for you or not. If not, explain things that you need to do next time you make more tests.**
+Throughout this learning module, I applied the principles of Test-Driven Development (TDD) and evaluated its impact on my development process. Using Percival’s self-reflective questions as a guide, I have assessed how well TDD influenced my testing approach and what improvements I can make moving forward.
+
+**Effectiveness of TDD in Refactoring**
+TDD provided a structured and reliable approach to modifying my code with confidence. Having a well-defined set of tests ensured that when I refactored sections of my implementation—such as adjusting the logic for handling status updates—the tests immediately identified any unintended changes. This helped me maintain stability in the code while making necessary enhancements.
+
+**Approach to Writing Tests**
+I generally followed the principle of writing tests before implementation, particularly when designing critical features. For instance, while working on the order processing functionality, I created test cases first to define expected behaviors before writing the actual implementation. This practice helped shape the logic and ensured that each component was built with testability in mind. However, there were instances where I found myself writing tests after the implementation, which is something I need to be more mindful of in future projects.
+
+**Assessment of Test Quality**
+While I believe my tests covered essential functionalities such as order creation, updates, and filtering, I recognize that there is room for improvement. Specifically, I need to enhance coverage for edge cases and unexpected input scenarios. Testing for error conditions, particularly around validation, could be more rigorous to ensure robustness.
+
+**What would I do for Future Improvement?**
+
+1️⃣ Develop a more disciplined approach to always writing failing tests before implementation.
+
+2️⃣ Increase focus on testing boundary conditions and exceptional cases.
+
+3️⃣ Consider incorporating acceptance tests early to guide development from a broader perspective.
+
+4️⃣ Ensure that all critical validation and error-handling mechanisms are thoroughly tested.
+
+In conclusion, TDD has been a valuable methodology that has improved the reliability and maintainability of my code.
+
+2. **You have created unit tests in Tutorial. Now reflect whether your tests have successfully followed F.I.R.S.T. principle or not. If not, explain things that you need to do the next time you create more tests.**
+
+I think my unit tests mostly already follow the F.I.R.S.T. principle, like
+
+- Fast: The tests run quickly and don’t depend on external systems. Using mocks helps avoid slow database operations.
+
+- Independent: Most tests don’t affect each other, but some repository tests might depend on the order they run. I need to reset the repository for each test.
+
+- Repeatable: The tests always use the same data and don’t rely on things like network or database state, making them reliable.
+
+- Self-validating: The test results are clear, but some error messages could be more detailed to make debugging easier.
+
+- Timely: Most tests were written before the implementation (TDD), but some edge cases were added later. I should write these earlier.
+
+But, I think there are also some things I can improve like maybe I can make sure each test is fully independent by resetting the repository, use better error messages so test failures are easier to understand, and write more edge case tests before coding, not after.
